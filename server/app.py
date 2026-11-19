@@ -22,10 +22,16 @@ def make_slug(name):
 
 
 def create_project_files(project_id, name, description, project_type):
-    folder_name = f"{project_id}-{make_slug(name)}"
+    base_folder = f"{project_id}-{make_slug(name)}"
+    folder_name = base_folder
+    suffix = 2
+
+    while (PROJECTS_DIR / folder_name).exists():
+        folder_name = f"{base_folder}-{suffix}"
+        suffix += 1
+
     project_dir = PROJECTS_DIR / folder_name
     source_dir = project_dir / "src"
-
     source_dir.mkdir(parents=True, exist_ok=False)
 
     metadata = {
