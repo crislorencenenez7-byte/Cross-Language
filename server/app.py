@@ -5,12 +5,13 @@ from pathlib import Path
 from urllib.parse import urlsplit, unquote
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
-from database import initialize, DB_PATH, ROOT, connect
+from database import initialize, DB_PATH, ROOT, PROJECTS_DIR, connect
 
-HOST = "127.0.0.1"
-PORT = 8300
+import os
 
-PROJECTS_DIR = ROOT / "projects"
+HOST = "0.0.0.0"
+PORT = int(os.environ.get("PORT", "8300"))
+
 PROJECT_TYPES = {"web", "2d", "3d", "blank"}
 MAX_BODY = 1024 * 1024 + 16 * 1024
 
@@ -77,7 +78,8 @@ class CrossHandler(BaseHTTPRequestHandler):
         origin = self.headers.get("Origin", "")
         allowed_origins = {
             "http://127.0.0.1:8301",
-            "http://localhost:8301"
+            "http://localhost:8301",
+            "https://crislorencenenez7-byte.github.io"
         }
 
         if origin in allowed_origins:

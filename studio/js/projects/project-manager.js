@@ -1,4 +1,4 @@
-const API = "http://127.0.0.1:8300/api";
+const API = window.CROSS_API_BASE || "http://127.0.0.1:8300/api";
 
 const form = document.getElementById("create-project-form");
 const list = document.getElementById("project-list");

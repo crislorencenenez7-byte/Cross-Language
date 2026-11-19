@@ -1,8 +1,14 @@
+import os
 import sqlite3
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-DB_PATH = ROOT / "database" / "cross.db"
+DATA_ROOT = Path(
+    os.environ.get("CROSS_DATA_DIR", str(ROOT))
+).expanduser().resolve()
+
+DB_PATH = DATA_ROOT / "database" / "cross.db"
+PROJECTS_DIR = DATA_ROOT / "projects"
 
 
 def connect():

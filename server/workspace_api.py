@@ -8,15 +8,15 @@ def install(handler):
 
     def project_dir(pid):
         from pathlib import Path
-        from database import ROOT, connect
+        from database import PROJECTS_DIR, connect
         with connect() as db:
             row = db.execute(
                 "SELECT folder FROM projects WHERE id=?", (pid,)
             ).fetchone()
         if not row or not row["folder"] or Path(row["folder"]).name != row["folder"]:
             raise ValueError("Project not found.")
-        root = (ROOT / "projects" / row["folder"]).resolve()
-        if root.parent != (ROOT / "projects").resolve() or not root.is_dir():
+        root = (PROJECTS_DIR / row["folder"]).resolve()
+        if root.parent != PROJECTS_DIR.resolve() or not root.is_dir():
             raise ValueError("Invalid project directory.")
         return root
 
