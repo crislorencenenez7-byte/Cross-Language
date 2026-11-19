@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CROSS Studio — Code Editor</title>
+<link rel="stylesheet" href="./preview-style.css">
+</head>
+<body>
+<div class="app">
+<header>
+ <div class="brand">CROSS <span>STUDIO 3.0</span></div>
+ <a href="./project-structure-preview.html">Project Structure</a>
+</header>
+<main>
+ <h1>Code Editor</h1>
+ <p class="subtitle">Edit your selected source file.</p>
+ <section class="card">
+  <h2 id="file-name">Source File</h2>
+  <textarea class="editor" id="source" spellcheck="false"></textarea>
+  <div class="toolbar">
+   <button class="primary" id="save">Save</button>
+   <button class="secondary" id="back">Back to Structure</button>
+  </div>
+ </section>
+ <section class="card">
+  <h2>Output</h2>
+  <div class="output" id="output">Editor ready.</div>
+ </section>
+ <p class="help">This is an isolated redesign preview. Production compiler and database integration are not connected yet.</p>
+</main>
+<footer>CROSS Studio 3.0 · Code Editor</footer>
+</div>
+<script>
+const file=localStorage.getItem("crossPreviewFile")||"main.x";
+const key="crossPreviewCode:"+file;
+document.getElementById("file-name").textContent=file;
+document.getElementById("source").value=localStorage.getItem(key)||"";
+document.getElementById("save").onclick=()=>{
+ localStorage.setItem(key,document.getElementById("source").value);
+ document.getElementById("output").textContent="Saved in preview session: "+file;
+};
+document.getElementById("back").onclick=()=>{
+ location.href="./project-structure-preview.html";
+};
+</script>
+</body>
+</html>

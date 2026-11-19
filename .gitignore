@@ -1,0 +1,20 @@
+.env
+.env.*
+!.env.example
+*.db
+*.sqlite
+*.sqlite3
+__pycache__/
+*.pyc
+node_modules/
+backups/
+*.bak
+*.backup
+*.before-*
+.DS_Store
+
+# Runtime files
+*.log
+*.pid
+studio-server.log
+database/redesign-deploy.json

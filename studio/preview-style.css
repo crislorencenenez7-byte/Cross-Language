@@ -1,0 +1,32 @@
+*{box-sizing:border-box}
+body{margin:0;background:#0b1120;color:#e5edf8;font:16px Arial,sans-serif}
+.app{width:100%;max-width:640px;margin:auto;min-height:100vh;background:#0d1728;border-left:1px solid #26364d;border-right:1px solid #26364d}
+header{height:56px;padding:0 17px;background:#111e32;border-bottom:1px solid #293b54;display:flex;align-items:center;justify-content:space-between}
+.brand{font-size:16px;font-weight:800;letter-spacing:1px}
+.brand span{color:#45baff}
+header a{color:#8fcfff;text-decoration:none;font-size:13px}
+main{padding:20px 17px 35px}
+h1{font-size:25px;margin:0 0 7px}
+h2{font-size:17px;margin:0 0 14px}
+.subtitle{color:#9eb0c7;font-size:14px;line-height:1.5;margin:0 0 20px}
+.card{background:#142238;border:1px solid #293e59;border-radius:12px;padding:17px;margin-bottom:14px}
+label{display:block;color:#b5c5d9;font-size:14px;margin:14px 0}
+input,textarea{display:block;width:100%;max-width:100%;margin-top:8px;padding:13px;background:#0b1525;color:white;border:1px solid #344963;border-radius:9px;font-size:15px}
+textarea{resize:vertical;min-height:85px}
+button{border:0;border-radius:9px;padding:12px 16px;font-size:14px;font-weight:700;cursor:pointer}
+.primary{background:#168bd0;color:white}
+.secondary{background:#233b58;color:#e5edf8}
+.toolbar{display:flex;gap:9px;flex-wrap:wrap;margin:12px 0 17px}
+.type{width:100%;padding:15px;text-align:left;background:#193653;color:white;border:1px solid #329de0}
+.type strong{display:block;margin:0 0 5px;font-size:17px}
+.type small{color:#b4c7dd;font-size:13px}
+.explorer{background:#0b1728;border:1px solid #2a3d55;border-radius:10px;padding:10px}
+.tree-row{display:flex;align-items:center;gap:10px;padding:12px 10px;border-radius:7px;color:#d5e2f2;cursor:pointer;font-size:15px}
+.tree-row:hover{background:#1b304b}
+.indent{padding-left:28px}
+.file{color:#79c5ff}
+.editor{width:100%;min-height:420px;background:#081321;color:#dceafa;border:1px solid #30445f;border-radius:10px;padding:15px;font:14px/1.7 monospace;resize:vertical}
+.output{padding:13px;background:#081321;border:1px solid #293b54;border-radius:9px;color:#93e5b5;min-height:55px;white-space:pre-wrap}
+.help{color:#aabbd0;font-size:14px;line-height:1.6}
+footer{padding:13px;text-align:center;color:#7187a3;font-size:11px;border-top:1px solid #26364d}
+@media(max-width:380px){main{padding:15px 12px}header{padding:0 12px}h1{font-size:22px}.card{padding:14px}}

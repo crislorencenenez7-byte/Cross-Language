@@ -1,0 +1,11 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CROSS — Code Editor</title><link rel="stylesheet" href="./css/studio.css"><style>
+body{background:#0b1120;color:#e5edf8}.shell{max-width:850px;margin:auto;padding:16px}.card{background:#142238;border:1px solid #293e59;border-radius:12px;padding:16px;margin:14px 0}textarea{width:100%;min-height:55vh;box-sizing:border-box;background:#081321;color:#dceafa;border:1px solid #30445f;border-radius:8px;padding:14px;font:14px/1.6 monospace}button{padding:11px 15px;margin:4px;border:0;border-radius:8px;background:#168bd0;color:white;font-weight:bold}.muted{color:#9eb0c7;font-size:13px}
+</style></head><body><main class="shell"><a id="back" href="#">← Project Structure</a><h1 id="filename">Code Editor</h1><section class="card"><textarea id="source" spellcheck="false"></textarea><button id="save">Save File</button><button id="compile">Compile</button><p id="status" class="muted">Loading...</p><pre id="output" class="muted"></pre></section></main>
+<script type="module">
+const API="http://127.0.0.1:8300/api",q=new URLSearchParams(location.search),id=q.get("id"),path=q.get("path"),$=x=>document.getElementById(x);
+$("filename").textContent=path;$("back").href="./project-structure.html?id="+id;
+async function api(url,opt={}){const r=await fetch(API+url,{...opt,headers:{"Content-Type":"application/json"}});const d=await r.json();if(!r.ok||!d.success)throw Error(d.error||"Request failed");return d;}
+try{$("source").value=(await api("/projects/"+id+"/file?path="+encodeURIComponent(path))).content;$("status").textContent="File loaded.";}catch(e){$("status").textContent=e.message;}
+$("save").onclick=async()=>{try{await api("/projects/"+id+"/file",{method:"POST",body:JSON.stringify({path,content:$("source").value})});$("status").textContent="Saved successfully.";}catch(e){$("status").textContent=e.message;}};
+$("compile").onclick=()=>{$("output").textContent="File is ready. Use the CROSS language processor from the main language tools to compile this source.";};
+</script><script src="./js/version-check.js"></script></body></html>

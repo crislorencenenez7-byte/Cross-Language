@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CROSS Studio — Create Project</title>
+<link rel="stylesheet" href="./preview-style.css">
+</head>
+<body>
+<div class="app">
+<header>
+ <div class="brand">CROSS <span>STUDIO 3.0</span></div>
+ <a href="#help">Help</a>
+</header>
+<main>
+ <h1>Create Project</h1>
+ <p class="subtitle">Create a new project and start building with CROSS Studio.</p>
+
+ <section class="card">
+  <h2>Project Type</h2>
+  <button class="type" type="button">
+   📁 <strong>Blank Project</strong>
+   <small>Start with an empty CROSS workspace.</small>
+  </button>
+ </section>
+
+ <section class="card">
+  <h2>Project Information</h2>
+  <label>Project Name
+   <input id="project-name" placeholder="My CROSS Project" maxlength="80">
+  </label>
+  <label>Description
+   <textarea id="project-description" placeholder="Describe your project..." maxlength="500"></textarea>
+  </label>
+  <button class="primary" id="create-project">Create Project</button>
+ </section>
+
+ <section class="card" id="help">
+  <h2>Help</h2>
+  <div class="help">
+   Create a project by entering its name and description.<br>
+   After creation, Project Structure will open separately.<br>
+   Select a source file there to open the Code Editor.
+  </div>
+ </section>
+</main>
+<footer>CROSS Studio 3.0 · Create Project Preview</footer>
+</div>
+<script>
+document.getElementById("create-project").onclick=()=>{
+ const name=document.getElementById("project-name").value.trim();
+ const description=document.getElementById("project-description").value.trim();
+ if(!name){alert("Please enter a project name.");return;}
+ localStorage.setItem("crossPreviewProject",JSON.stringify({name,description,type:"blank"}));
+ location.href="./project-structure-preview.html";
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+device MainScreen {
+  width: 100%
+  layout: vertical
+  padding: 20
+}
