@@ -23,16 +23,25 @@ def make_slug(name):
 
 def create_project_files(project_id, name, description, project_type):
     base_folder = f"{project_id}-{make_slug(name)}"
-    folder_name = base_folder
-    suffix = 2
+    suffix = 1
 
-    while (PROJECTS_DIR / folder_name).exists():
-        folder_name = f"{base_folder}-{suffix}"
-        suffix += 1
+    PROJECTS_DIR.mkdir(parents=True, exist_ok=True)
 
-    project_dir = PROJECTS_DIR / folder_name
+    while True:
+        folder_name = (
+            base_folder if suffix == 1
+            else f"{base_folder}-{suffix}"
+        )
+        project_dir = PROJECTS_DIR / folder_name
+
+        try:
+            project_dir.mkdir(parents=False, exist_ok=False)
+            break
+        except FileExistsError:
+            suffix += 1
+
     source_dir = project_dir / "src"
-    source_dir.mkdir(parents=True, exist_ok=False)
+    source_dir.mkdir(exist_ok=True)
 
     metadata = {
         "id": project_id,
@@ -61,7 +70,6 @@ def create_project_files(project_id, name, description, project_type):
         encoding="utf-8"
     )
 
-    # Separate entry files preserve the three language roles.
     (source_dir / "main.x").write_text("", encoding="utf-8")
     (source_dir / "main.xsharp").write_text("", encoding="utf-8")
     (source_dir / "main.xs").write_text("", encoding="utf-8")
