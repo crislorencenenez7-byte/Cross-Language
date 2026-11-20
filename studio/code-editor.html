@@ -1,11 +1,59 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CROSS — Code Editor</title><link rel="stylesheet" href="./css/studio.css"><style>
-body{background:#0b1120;color:#e5edf8}.shell{max-width:850px;margin:auto;padding:16px}.card{background:#142238;border:1px solid #293e59;border-radius:12px;padding:16px;margin:14px 0}textarea{width:100%;min-height:55vh;box-sizing:border-box;background:#081321;color:#dceafa;border:1px solid #30445f;border-radius:8px;padding:14px;font:14px/1.6 monospace}button{padding:11px 15px;margin:4px;border:0;border-radius:8px;background:#168bd0;color:white;font-weight:bold}.muted{color:#9eb0c7;font-size:13px}
-</style></head><body><main class="shell"><a id="back" href="#">← Project Structure</a><h1 id="filename">Code Editor</h1><section class="card"><textarea id="source" spellcheck="false"></textarea><button id="save">Save File</button><button id="compile">Compile</button><p id="status" class="muted">Loading...</p><pre id="output" class="muted"></pre></section></main>
-<script src="./js/api-config.js"></script><script type="module">
-const API=window.CROSS_API_BASE || "http://127.0.0.1:8300/api",q=new URLSearchParams(location.search),id=q.get("id"),path=q.get("path"),$=x=>document.getElementById(x);
-$("filename").textContent=path;$("back").href="./project-structure.html?id="+id;
-async function api(url,opt={}){const r=await fetch(API+url,{...opt,headers:{"Content-Type":"application/json"}});const d=await r.json();if(!r.ok||!d.success)throw Error(d.error||"Request failed");return d;}
-try{$("source").value=(await api("/projects/"+id+"/file?path="+encodeURIComponent(path))).content;$("status").textContent="File loaded.";}catch(e){$("status").textContent=e.message;}
-$("save").onclick=async()=>{try{await api("/projects/"+id+"/file",{method:"POST",body:JSON.stringify({path,content:$("source").value})});$("status").textContent="Saved successfully.";}catch(e){$("status").textContent=e.message;}};
-$("compile").onclick=()=>{$("output").textContent="File is ready. Use the CROSS language processor from the main language tools to compile this source.";};
-</script><script src="./js/version-check.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080f1d">
+<title>CROSS Studio — Code Workspace</title>
+<link rel="stylesheet" href="./css/studio.css">
+<link rel="stylesheet" href="./css/workspace.css">
+</head>
+<body class="workspace-body">
+<header class="workspace-topbar">
+  <a class="workspace-brand" href="./editor.html">CROSS <span>STUDIO 3.0</span></a>
+  <div class="workspace-project" id="project-name">Loading project…</div>
+  <div class="workspace-actions">
+    <button id="new-folder" class="tool-button" type="button">＋ Folder</button>
+    <button id="new-file" class="tool-button" type="button">＋ File</button>
+    <button id="save-file" class="tool-button primary" type="button">Save</button>
+    <button id="open-preview" class="tool-button accent" type="button">▶ Preview</button>
+  </div>
+</header>
+<main class="workspace-layout">
+  <aside class="explorer-panel" aria-label="Project explorer">
+    <div class="panel-heading"><span>EXPLORER</span><span id="file-count">0 files</span></div>
+    <div class="explorer-project" id="explorer-project">PROJECT</div>
+    <div id="file-tree" class="file-tree"><p class="empty-state">Loading files…</p></div>
+  </aside>
+  <section class="editor-panel">
+    <nav id="editor-tabs" class="editor-tabs" aria-label="Open files">
+      <span class="empty-tab">No file open</span>
+    </nav>
+    <div class="editor-toolbar">
+      <div><span id="active-path">Select a file from Explorer</span><span id="dirty-indicator"></span></div>
+      <div class="editor-tools">
+        <div class="language-switch" aria-label="CROSS language entry files"><button class="language-tab" data-language="X" type="button">X</button><button class="language-tab" data-language="X#" type="button">X#</button><button class="language-tab" data-language="XS" type="button">XS</button></div>
+        <span id="language-badge" class="language-badge">CROSS</span>
+        <button id="compile-file" class="tool-button small" type="button">Compile</button>
+      </div>
+    </div>
+    <div class="code-area" id="code-area">
+      <div id="line-numbers" class="line-numbers" aria-hidden="true">1</div>
+      <textarea id="source" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="Code editor" placeholder="Choose a file from the Explorer to start editing…" disabled></textarea>
+    </div>
+    <section class="output-panel">
+      <div class="output-heading"><span>OUTPUT</span><button id="clear-output" class="text-button" type="button">Clear</button></div>
+      <pre id="output">CROSS compiler output will appear here.</pre>
+    </section>
+  </section>
+</main>
+<footer class="workspace-statusbar">
+  <span id="workspace-status">Connecting to CROSS workspace…</span>
+  <span id="cursor-status">Ln 1, Col 1</span>
+  <span id="encoding-status">UTF-8</span>
+</footer>
+<script src="./js/api-config.js"></script>
+<script type="module" src="./js/workspace-editor.js"></script>
+<script src="./js/version-check.js"></script>
+</body>
+</html>

@@ -87,7 +87,7 @@ def install(handler):
             if kind == "folder":
                 target.mkdir(parents=True, exist_ok=False)
             elif kind == "file":
-                if target.suffix.lower() not in (".x", ".xsharp", ".xs", ".txt", ".json", ".md"):
+                if target.suffix.lower() not in (".x", ".xsharp", ".xs", ".txt", ".json", ".md", ".css", ".html", ".js", ".svg", ".xml"):
                     raise ValueError("Unsupported file extension.")
                 target.parent.mkdir(parents=True, exist_ok=True)
                 with target.open("x", encoding="utf-8") as f:

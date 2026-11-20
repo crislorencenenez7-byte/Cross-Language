@@ -128,3 +128,11 @@ python -m compileall -q server
 - `studio/js/api-config.js` selects the local API when opened on `localhost` or `127.0.0.1`; otherwise it uses the Render API.
 - Render Free storage may be ephemeral. Keep local database backups.
 - The current project API is a development backend. Do not store private information or expose write access publicly until authentication and ownership controls are added.
+
+## CROSS Code Workspace and Live Preview
+
+Open a project and choose **Open Code Workspace** to use the VS Code-inspired workspace. The Explorer lists folders and files from that project's own directory tree. Files are opened by their relative project path and saved back to that exact path through the workspace API. Nested paths such as `src/pages/home.x` are supported.
+
+The workspace supports creating folders and files (`.x`, `.xsharp`, `.xs`, `.html`, `.css`, `.js`, `.json`, `.md`, `.svg`, `.xml`, and `.txt`). X, X#, and XS source files can be compiled from the editor. Use **Preview** to open the separate `studio/preview.html` page. The preview reads the project's file tree and source files from the backend, uses the configured project entry points when they contain source, and otherwise finds the first non-empty file for each CROSS language. It refreshes after saves and periodically while Auto refresh is enabled.
+
+The editor currently uses a lightweight native text editor with line numbers, file tabs, indentation, keyboard shortcuts, and compile output. It does not yet provide full VS Code features such as language-server autocomplete, breakpoints, or extension support.
