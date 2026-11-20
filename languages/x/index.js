@@ -10,8 +10,10 @@ const COMPONENTS = [
 ];
 
 const DATATYPES = [
-  "Text","Number","Boolean","URL","ID","Class",
-  "Children","Attribute","Element","Array","Null"
+  "Text", "String", "Number", "Integer", "Decimal", "Boolean",
+  "URL", "ID", "Class", "Children", "Attribute", "Element",
+  "Array", "Object", "Map", "Set", "Tuple", "Null", "Optional",
+  "Component", "Style", "Event", "State", "Reference"
 ];
 
 function parseValue(raw) {

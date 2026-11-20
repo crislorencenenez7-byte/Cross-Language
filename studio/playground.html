@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#08111f">
+<title>CROSS Studio 3.0 — Code Playground</title>
+<style>
+:root{color-scheme:dark;--bg:#08111f;--panel:#111f33;--panel2:#162943;--line:#2b4260;--muted:#9db0c8;--text:#edf5ff;--blue:#238de0;--cyan:#5bd5ef;--green:#62dda5}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 55% -18%,#1a4167,transparent 50%),var(--bg);color:var(--text);font:14px/1.5 Inter,system-ui,Arial,sans-serif}
+.topbar{height:66px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;background:#0c1829;border-bottom:1px solid var(--line)}
+.brand{font-weight:850;letter-spacing:.8px}.brand span{color:var(--cyan)}.topbar a{color:var(--cyan);text-decoration:none}
+main{max-width:1500px;margin:auto;padding:22px}.intro{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:18px;flex-wrap:wrap}
+h1{font-size:26px;margin:0}.muted{color:var(--muted);margin:6px 0 0}.layout{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(320px,.9fr);gap:16px;align-items:start}
+.panel{background:linear-gradient(145deg,#152740,#101d30);border:1px solid var(--line);border-radius:15px;overflow:hidden;box-shadow:0 12px 35px #0002}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 16px;border-bottom:1px solid var(--line);background:#14243a}
+.panel-head strong{font-size:13px}.toolbar{display:flex;gap:8px;flex-wrap:wrap;padding:12px 14px;border-bottom:1px solid var(--line)}
+button{border:1px solid #345477;background:#1a3553;color:white;border-radius:9px;padding:9px 13px;font:inherit;font-weight:700;cursor:pointer}
+button.primary{border-color:transparent;background:linear-gradient(120deg,#197bd1,#149ec4)}
+button.secondary{background:#1b3049}button:disabled{opacity:.45;cursor:not-allowed}
+.tabs{display:flex;gap:7px;padding:12px 14px 0}
+.tab{background:#12243a;color:#9db0c8;border:1px solid #2b4260}.tab.active{background:#1b4166;color:#fff;border-color:#348fd1}
+.editor-wrap{padding:12px 14px 14px}
+textarea{display:block;width:100%;min-height:390px;resize:vertical;border:1px solid #2b4260;border-radius:10px;background:#081321;color:#cde5ff;padding:16px;outline:none;font:13px/1.8 ui-monospace,SFMono-Regular,Consolas,monospace;tab-size:2}
+textarea:focus{border-color:#2999e8}
+.editor-foot{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:11px;padding:0 15px 13px}
+#preview{min-height:320px;background:#fff;color:#17243a;padding:20px;margin:14px;border-radius:11px;overflow:auto}
+#preview button{cursor:pointer}#preview img{max-width:100%}
+#output{white-space:pre-wrap;overflow-wrap:anywhere;min-height:105px;max-height:300px;overflow:auto;padding:14px;margin:14px;border-radius:10px;border:1px solid #293f5d;background:#081321;color:#a9edc4;font:12px/1.7 ui-monospace,monospace}
+.datatypes{padding:14px;display:grid;gap:12px}.datatype-group{border:1px solid #2b4260;border-radius:10px;padding:12px;background:#0e1b2d}.datatype-group h4{margin:0 0 8px;color:var(--cyan);font-size:12px}.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{font-size:11px;padding:5px 8px;border-radius:20px;background:#1b3049;border:1px solid #2b4260;color:#d6e8fb}
+.status{font-size:12px;color:var(--muted);padding:0 15px 14px}.status.ok{color:var(--green)}.status.error{color:#ff9292}
+@media(max-width:900px){.layout{grid-template-columns:1fr}main{padding:14px}.topbar{padding:0 14px}textarea{min-height:320px}}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="brand">CROSS <span>STUDIO 3.0</span> · PLAYGROUND</div><a href="./editor.html">← Studio Home</a></header>
+<main>
+ <div class="intro"><div><h1>Code Playground</h1><p class="muted">Write, compile and preview X, X# and XS in one workspace.</p></div><div><button id="run" class="primary">▶ Run Code</button> <button id="sample" class="secondary">Load Sample</button> <button id="clear" class="secondary">Clear</button></div></div>
+ <div class="layout">
+  <section class="panel">
+   <div class="panel-head"><strong>CODE EDITOR</strong><span class="muted">CROSS language workspace</span></div>
+   <div class="tabs" role="tablist">
+    <button class="tab active" data-language="X">X · Structure</button>
+    <button class="tab" data-language="X#">X# · Design</button>
+    <button class="tab" data-language="XS">XS · Logic</button>
+   </div>
+   <div class="editor-wrap"><textarea id="source" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="Source code"></textarea></div>
+   <div class="editor-foot"><span id="language-label">X · Website Structure</span><span id="line-count">1 line</span></div>
+   <div id="status" class="status">Ready. Select a language and press Run Code.</div>
+  </section>
+  <div style="display:grid;gap:16px">
+   <section class="panel"><div class="panel-head"><strong>LIVE PREVIEW</strong><span class="muted">X + X# renderer</span></div><div id="preview"><p>Your website preview will appear here.</p></div></section>
+   <section class="panel"><div class="panel-head"><strong>RUN OUTPUT</strong><span class="muted">Compiler and XS runtime</span></div><pre id="output">Waiting for code…</pre></section>
+   <section class="panel"><div class="panel-head"><strong>DATATYPE LIBRARY</strong><span class="muted">Supported language types</span></div><div class="datatypes" id="datatype-list"></div></section>
+  </div>
+ </div>
+</main>
+<script type="module" src="./js/playground.js"></script>
+</body>
+</html>

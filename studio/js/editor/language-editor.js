@@ -8,28 +8,58 @@ const output = document.getElementById("output");
 const status = document.getElementById("status");
 
 const samples = {
-  X: `<app>
-  <header>
-    <title>My CROSS App</title>
-  </header>
-  <button id="play">Play Game</button>
-</app>`,
-
+  X: `App Main {
+  Heading Title {
+    text: "My CROSS Website"
+  }
+  Paragraph Intro {
+    text: "Built with X, X# and XS."
+  }
+  Button LaunchButton {
+    text: "Launch"
+  }
+}`,
   "X#": `device MainScreen {
   width: 100%
   layout: vertical
   padding: 20
-
-  button PlayButton {
-    color: blue
-    width: 200
-    radius: 10
-  }
+  gap: 14
+}
+app Main {
+  background: "#f7f9fc"
+  color: "#17243a"
+  padding: 24
+  radius: 16
+}
+heading Title {
+  color: "#1268c4"
+  fontSize: 32
+  fontWeight: 800
+}
+button LaunchButton {
+  background: "#147bd1"
+  color: white
+  padding: 12
+  radius: 10
 }`,
+  XS: `function start() {
+  let title: String = "Welcome to CROSS"
+  let score: Integer = 10
+  let bonus: Integer = 5
+  let active: Boolean = true
+  let values: Array = [10, 20, 30]
 
-  XS: `function startGame() {
-  print("Welcome to CROSS 3.0!")
-  return 1
+  if active {
+    print(title)
+    print(score + bonus)
+  } else {
+    print("Inactive")
+  }
+
+  repeat 2 {
+    print("Running XS")
+  }
+  return score + bonus
 }`
 };
 

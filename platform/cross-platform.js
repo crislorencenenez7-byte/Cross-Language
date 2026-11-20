@@ -83,36 +83,44 @@ function renderNode(node, styles) {
 function generateJS(program) {
   if (!program) return "";
 
-  const expr = value => {
-    if (value === null) return "null";
-    if (typeof value === "string") return JSON.stringify(value);
-    if (typeof value === "number" || typeof value === "boolean") return String(value);
-    if (value.variable) return value.variable;
-    if (value.operation) return `(${expr(value.left)} ${value.operation} ${expr(value.right)})`;
+  const expression = node => {
+    if (!node) return "null";
+    if (node.kind === "literal") return JSON.stringify(node.value);
+    if (node.kind === "variable") return node.name;
+    if (node.kind === "array") return `[${node.items.map(expression).join(",")}]`;
+    if (node.kind === "object") {
+      return `{${node.entries.map(([key, value]) =>
+        `${JSON.stringify(key)}:${expression(value)}`
+      ).join(",")}}`;
+    }
+    if (node.kind === "unary") return `(${node.operator}${expression(node.value)})`;
+    if (node.kind === "binary") {
+      return `(${expression(node.left)} ${node.operator} ${expression(node.right)})`;
+    }
     return "null";
   };
 
-  const functions = program.functions.map(fn => {
-    const body = fn.statements.map(s => {
-      if (s.type === "let") return `let ${s.name}=${expr(s.value)};`;
-      if (s.type === "set") return `${s.name}=${expr(s.value)};`;
-      if (s.type === "print") return `console.log(${expr(s.value)});`;
-      if (s.type === "return") return `return ${expr(s.value)};`;
-      if (s.type === "call") return `${s.name}();`;
-      return "";
-    }).join("\n");
-
-    return `function ${fn.name}(){${body}}`;
+  const statements = items => items.map(statement => {
+    if (statement.type === "let") return `let ${statement.name}=${expression(statement.expression)};`;
+    if (statement.type === "set") return `${statement.name}=${expression(statement.expression)};`;
+    if (statement.type === "print") return `console.log(${expression(statement.expression)});`;
+    if (statement.type === "return") return `return ${expression(statement.expression)};`;
+    if (statement.type === "call") return `${statement.name}();`;
+    if (statement.type === "if") {
+      return `if(${expression(statement.expression)}){${statements(statement.body)}}else{${statements(statement.elseBody)}}`;
+    }
+    if (statement.type === "while") {
+      return `while(${expression(statement.expression)}){${statements(statement.body)}}`;
+    }
+    if (statement.type === "repeat") {
+      return `for(let __cross_i=0,__cross_n=${expression(statement.expression)};__cross_i<__cross_n;__cross_i++){${statements(statement.body)}}`;
+    }
+    return "";
   }).join("\n");
 
-  return `${functions}
-document.addEventListener("click",event=>{
- const button=event.target.closest("[data-xs-click]");
- if(!button)return;
- const fn=window[button.dataset.xsClick];
- if(typeof fn==="function")fn();
-});
-${program.functions.map(fn => `window.${fn.name}=${fn.name};`).join("\n")}`;
+  return program.functions.map(fn =>
+    `function ${fn.name}(){${statements(fn.statements)}}`
+  ).join("\n");
 }
 
 export class CrossPlatform {

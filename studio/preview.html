@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#08111f">
+<title>CROSS Studio — Project Preview</title>
+<style>
+:root{color-scheme:dark;--bg:#08111f;--panel:#111f33;--line:#263b57;--muted:#9db0c8;--blue:#248fe0;--cyan:#5bd4ee;--text:#edf5ff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -15%,#1a3c60,transparent 48%),var(--bg);color:var(--text);font:15px/1.5 Inter,system-ui,Arial,sans-serif}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:15px 20px;border-bottom:1px solid var(--line);background:#0c1829}
+header a{color:var(--cyan);text-decoration:none}main{max-width:1180px;margin:auto;padding:22px}
+.panel{background:linear-gradient(145deg,#152740,#101d30);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:16px;box-shadow:0 12px 32px #0002}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.muted,#status{color:var(--muted);font-size:13px}
+button,select{border:1px solid #345477;background:#1b3552;color:white;border-radius:9px;padding:10px 14px;font:inherit}
+button{cursor:pointer;font-weight:700;background:linear-gradient(120deg,#167bd0,#13a2c7)}button.secondary{background:#1b304a}
+#site{background:#fff;color:#17243a;min-height:350px;padding:24px;border-radius:12px;overflow:auto}
+#site button{cursor:pointer}#site img{max-width:100%}#site [data-cross-component="App"],#site [data-cross-component="Page"]{width:100%}
+#console{white-space:pre-wrap;overflow-wrap:anywhere;background:#091522;border:1px solid #263b57;border-radius:10px;padding:14px;min-height:90px;color:#a8edc2;font:13px/1.7 ui-monospace,monospace}
+.error{color:#ff9292!important}
+@media(max-width:600px){main{padding:13px}header{padding:13px}#site{padding:14px}}
+</style>
+</head>
+<body>
+<header><strong>CROSS <span style="color:#5bd4ee">3.0</span> · PROJECT PREVIEW</strong><a id="back" href="./editor.html">← Back to Studio</a></header>
+<main>
+<section class="panel">
+ <div class="top"><div><h2 id="project-name">Loading project…</h2><p id="status">Connecting to CROSS backend…</p></div><button id="refresh" class="secondary" type="button">Refresh Preview</button></div>
+</section>
+<section class="panel"><h3>Website Output</h3><div id="site">Loading website…</div></section>
+<section class="panel">
+ <div class="top"><div><h3>XS Runtime</h3><p class="muted">Run a compiled XS function in the restricted CROSS interpreter.</p></div>
+ <div class="top"><select id="xs-function" aria-label="XS function"></select><button id="run-xs" type="button">▶ Run XS</button></div></div>
+ <pre id="console">Waiting for XS compilation…</pre>
+</section>
+</main>
+<script src="./js/api-config.js"></script>
+<script type="module">
+import { renderCROSS } from "./js/preview-renderer.js";
+import { callXS } from "../languages/xs/index.js";
+
+const API=window.CROSS_API_BASE||"http://127.0.0.1:8300/api";
+const id=new URLSearchParams(location.search).get("id");
+const $=name=>document.getElementById(name);
+let currentResult=null;
+
+$("back").href=id?`./project-structure.html?id=${encodeURIComponent(id)}`:"./editor.html";
+
+async function loadPreview(){
+ if(!id||!/^\d+$/.test(id))throw new Error("Invalid or missing project ID.");
+ $("status").textContent="Loading project source files...";
+ $("status").classList.remove("error");
+ const response=await fetch(`${API}/projects/${encodeURIComponent(id)}`);
+ const data=await response.json();
+ if(!response.ok||!data.success)throw new Error(data.error||"Unable to load project.");
+ const project=data.project,files=project.files||{};
+ $("project-name").textContent=project.name;
+ currentResult=renderCROSS({x:files.X||"",xsharp:files["X#"]||"",xs:files.XS||""},$("site"));
+ $("status").textContent=`Preview ready · ${currentResult.componentCount} components · X and X# compiled`;
+ const select=$("xs-function");select.replaceChildren();
+ for(const name of currentResult.xsFunctions){
+  const option=document.createElement("option");option.value=name;option.textContent=name;select.append(option);
+ }
+ $("run-xs").disabled=!currentResult.logic;
+ $("console").textContent=currentResult.logic
+  ? `XS compiled · ${currentResult.xsFunctions.length} function(s) ready. Select a function and press Run XS.`
+  : "No XS source file found.";
+ $("console").classList.remove("error");
+}
+
+$("run-xs").addEventListener("click",()=>{
+ try{
+  if(!currentResult?.logic)throw new Error("No compiled XS program is available.");
+  const result=callXS(currentResult.logic,$("xs-function").value);
+  $("console").textContent=
+   `Function: ${result.function}\nOutput:\n${result.output.map(value=>typeof value==="object"?JSON.stringify(value):String(value)).join("\n")||"(no output)"}\n\nReturn: ${JSON.stringify(result.result)}\nVariables: ${JSON.stringify(result.variables,null,2)}`;
+  $("console").classList.remove("error");
+ }catch(error){$("console").textContent=`XS runtime error: ${error.message}`;$("console").classList.add("error");}
+});
+
+$("refresh").addEventListener("click",()=>loadPreview().catch(showError));
+function showError(error){$("status").textContent=`Preview failed: ${error.message}`;$("status").classList.add("error");$("site").textContent="Unable to render this project.";$("console").textContent=error.message;$("console").classList.add("error");}
+loadPreview().catch(showError);
+</script>
+</body>
+</html>
