@@ -177,10 +177,27 @@ document.querySelectorAll(".language-tab").forEach(tab => tab.addEventListener("
   else setStatus(`No ${tab.dataset.language} entry file found. Create ${path} in the Explorer.`);
 }));
 
+async function checkDatabase() {
+  const label = $("database-status");
+  const dot = $("database-dot");
+  try {
+    const response = await fetch(`${API}/health`, { cache: "no-store" });
+    const data = await response.json();
+    if (!response.ok || data.database !== true) throw new Error("Database unavailable");
+    label.textContent = "Connected · SQLite";
+    dot.style.background = "#37c98a";
+    dot.style.boxShadow = "0 0 9px #37c98a88";
+  } catch (_) {
+    label.textContent = "Connection unavailable";
+    dot.style.background = "#e0a34a";
+    dot.style.boxShadow = "0 0 9px #e0a34a88";
+  }
+}
+
 async function start() {
   if (!projectId || !/^\d+$/.test(projectId)) throw new Error("Missing or invalid project ID in the URL.");
   const data = await api(`/projects/${encodeURIComponent(projectId)}`);
-  state.project = data.project; $("project-name").textContent = state.project.name; $("explorer-project").textContent = state.project.name.toUpperCase();
+  state.project = data.project; checkDatabase(); $("project-name").textContent = state.project.name; $("explorer-project").textContent = state.project.name.toUpperCase();
   await refreshTree();
   const preferred = ["src/main.x", "src/main.xsharp", "src/main.xs"].find(path => state.files.some(file => file.path === path && file.type === "file"));
   const first = state.files.find(file => file.type === "file");
