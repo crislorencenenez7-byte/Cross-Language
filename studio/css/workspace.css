@@ -1,57 +1,58 @@
-
-:root{color-scheme:dark;--ws-bg:#080d17;--ws-panel:#101a29;--ws-panel2:#162438;--ws-border:#293d55;--ws-text:#e8f1fc;--ws-muted:#91a6bf;--ws-blue:#168bd0;--ws-cyan:#5bd4ee}
+/* CROSS Studio Code — desktop IDE workspace */
+:root{color-scheme:dark;--ide-bg:#111827;--ide-panel:#171e2b;--ide-panel2:#202a3a;--ide-border:#303b4d;--ide-text:#dce5f2;--ide-muted:#8d9aab;--ide-blue:#1768c5;--ide-cyan:#22b8e6}
 *{box-sizing:border-box}
-.workspace-body{margin:0;min-height:100vh;background:var(--ws-bg);color:var(--ws-text);font:14px/1.5 Inter,system-ui,Arial,sans-serif;display:flex;flex-direction:column;overflow:hidden}
-.workspace-topbar{min-height:64px;display:flex;align-items:center;gap:20px;padding:10px 18px;background:#0c1522;border-bottom:1px solid var(--ws-border);box-shadow:0 3px 18px #0004}
-.workspace-brand{font-size:16px;font-weight:900;letter-spacing:1.2px;color:#fff;text-decoration:none;white-space:nowrap}.workspace-brand span{color:var(--ws-cyan)}
-.workspace-project{min-width:0;flex:1;color:#d4e4f5;font-size:16px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.workspace-actions,.editor-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.tool-button{border:1px solid #36516e;border-radius:8px;background:#1b3049;color:#eaf4ff;padding:9px 13px;font:650 13px system-ui,Arial,sans-serif;cursor:pointer;transition:.15s}
-.tool-button:hover{filter:brightness(1.2);border-color:#5aa9db}.tool-button.primary{background:#176fae;border-color:#218fd3}.tool-button.accent{background:#087d91;border-color:#1c9bb0}.tool-button.small{padding:6px 10px}.tool-button:disabled{opacity:.45;cursor:not-allowed}
-.workspace-layout{flex:1;min-height:0;display:grid;grid-template-columns:320px minmax(0,1fr)}
-.explorer-panel{min-height:0;background:#0d1725;border-right:1px solid var(--ws-border);display:flex;flex-direction:column}
-.panel-heading{height:48px;padding:14px 16px 10px;display:flex;justify-content:space-between;color:#c8d8e9;font-size:12px;font-weight:850;letter-spacing:1.1px}
-.panel-heading span+span{font-weight:600;color:#819ab4;letter-spacing:0}
-.explorer-project{margin:0 10px;padding:17px 15px;border:1px solid #294765;border-radius:10px;background:linear-gradient(120deg,#17334e,#102337);font-size:16px;font-weight:900;letter-spacing:.7px;color:#f0f7ff;overflow-wrap:anywhere;box-shadow:0 5px 18px #0003}
-.file-tree{overflow:auto;padding:12px 9px 18px;flex:1}
-.tree-section-label{padding:11px 9px 7px;color:#829ab4;font-size:10px;font-weight:850;letter-spacing:1.2px}
-.tree-item{width:100%;display:flex;align-items:center;gap:9px;border:0;background:transparent;color:#d0deed;padding:9px 11px;text-align:left;border-radius:6px;cursor:pointer;font:14px system-ui,Arial,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tree-item:hover{background:#172b43}.tree-item.active{background:#174366;color:#fff;box-shadow:inset 2px 0 #59c5f2}.tree-item.folder{color:#f0d69b}.tree-item .tree-icon{width:19px;flex:0 0 19px;text-align:center}.tree-item .tree-name{overflow:hidden;text-overflow:ellipsis}
-.tree-children{margin-left:16px;border-left:1px solid #2b425d;padding-left:6px}
-.explorer-database{margin:8px 10px 12px;padding:13px;border:1px solid #29445f;border-radius:9px;background:#101f31}
-.explorer-database strong{display:block;font-size:11px;letter-spacing:1px;color:#a9c5df;margin-bottom:7px}
-.database-state{display:flex;align-items:center;gap:8px;color:#d7e7f6;font-size:12px}.database-dot{width:8px;height:8px;border-radius:50%;background:#37c98a;box-shadow:0 0 9px #37c98a88}
-.editor-panel{min-width:0;min-height:0;display:flex;flex-direction:column;background:#0b1422}
-.editor-tabs{min-height:43px;display:flex;overflow-x:auto;background:#0d1929;border-bottom:1px solid var(--ws-border)}
-.editor-tab{border:0;border-right:1px solid #1d3047;background:#101e30;color:#9fb4cc;padding:11px 16px;white-space:nowrap;cursor:pointer;font:13px system-ui,Arial,sans-serif}
-.editor-tab.active{background:#17283e;color:#fff;border-top:2px solid var(--ws-cyan);padding-top:9px}.editor-tab .tab-dirty{color:#f3c66d;margin-left:7px}.empty-tab{padding:12px 15px;color:#7389a3;font-size:13px}
-.editor-toolbar{min-height:47px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 15px;border-bottom:1px solid #1d3047;color:#a9bfd8;font-size:13px}
-.editor-toolbar>div:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.language-badge{font-size:11px;letter-spacing:.7px;color:#83d9f3;background:#12364a;padding:5px 9px;border-radius:5px}
-.code-area{display:flex;flex:1;min-height:220px;overflow:hidden;background:#0a1320}
-.line-numbers{width:54px;flex:0 0 54px;padding:16px 12px 22px 0;text-align:right;overflow:hidden;color:#617a96;background:#0b1727;border-right:1px solid #1c3047;font:14px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre}
-.code-area textarea{flex:1;min-width:0;resize:none;border:0;outline:0;padding:16px 19px 26px;background:transparent;color:#e0edfb;font:14px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace;tab-size:2;white-space:pre;overflow:auto}
-.code-area textarea:disabled{opacity:.5}
-.output-panel{height:190px;min-height:120px;display:flex;flex-direction:column;border-top:1px solid var(--ws-border);background:#0c1726}
-.output-heading{height:38px;display:flex;align-items:center;justify-content:space-between;padding:0 15px;color:#a9c0d8;font-size:11px;font-weight:850;letter-spacing:1px}
-.text-button{border:0;background:transparent;color:#79c8ed;font-size:12px;cursor:pointer}
-.output-panel pre{flex:1;overflow:auto;margin:0;padding:9px 15px 14px;color:#c3d9ed;font:13px/1.6 ui-monospace,monospace;white-space:pre-wrap;overflow-wrap:anywhere}
-.workspace-statusbar{min-height:29px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 12px;background:#075b83;color:#e8f8ff;font-size:11px}
-.workspace-statusbar span:first-child{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.language-switch{display:flex;gap:3px;padding:3px;background:#0b1727;border:1px solid #29425e;border-radius:7px}
-.language-tab{border:0;border-radius:5px;padding:5px 10px;background:transparent;color:#93abc4;font-size:11px;font-weight:850;cursor:pointer}
-.language-tab.active{background:#1c4a6b;color:#fff}
-@media(max-width:760px){
- .workspace-body{overflow:auto;min-height:100dvh}
- .workspace-topbar{min-height:auto;flex-wrap:wrap;gap:9px;padding:11px}
- .workspace-brand{font-size:14px}.workspace-project{font-size:14px;flex-basis:45%}
- .workspace-actions{width:100%;justify-content:flex-start}.tool-button{padding:8px 10px;font-size:12px}
- .workspace-layout{grid-template-columns: minmax(145px,34vw) minmax(0,1fr);min-height:calc(100dvh - 150px)}
- .panel-heading{padding:12px 8px;font-size:10px}.explorer-project{margin:0 6px;padding:12px 9px;font-size:12px}
- .file-tree{padding:8px 4px}.tree-item{font-size:12px;padding:9px 5px;gap:4px}.tree-children{margin-left:7px;padding-left:3px}
- .editor-tab{padding:10px 9px;font-size:11px}.editor-toolbar{align-items:flex-start;flex-direction:column;padding:8px;gap:7px}
- .editor-tools{width:100%;justify-content:space-between}.code-area{min-height:300px}.line-numbers{width:34px;flex-basis:34px;padding-right:7px;font-size:12px}
- .code-area textarea{padding:12px 8px;font-size:12px}.output-panel{height:155px}
- .workspace-statusbar{font-size:9px}
+.workspace-body{margin:0;height:100vh;min-height:560px;overflow:hidden;background:var(--ide-bg);color:var(--ide-text);font:14px/1.45 Inter,Segoe UI,system-ui,Arial,sans-serif;display:flex;flex-direction:column}
+.ide-menubar{height:52px;flex:0 0 52px;display:flex;align-items:center;gap:16px;padding:0 18px;background:#171d29;border-bottom:1px solid #293344}
+.ide-logo{font-size:32px;line-height:1;font-weight:1000;font-style:italic;color:#12a9f0;text-decoration:none;text-shadow:2px 2px #0759a4}
+.ide-title{font-size:16px;font-weight:650;color:#f0f4fa;text-decoration:none;white-space:nowrap}
+.ide-menus{display:flex;align-items:center;gap:2px;margin-left:16px;min-width:0}
+.ide-menus button,.window-controls span{border:0;background:transparent;color:#d6deea;padding:8px 10px;font:14px inherit;white-space:nowrap}
+.ide-menus button:hover{background:#2a3547;border-radius:5px}
+.window-controls{margin-left:auto;display:flex;gap:22px;color:#c8d2e0;font-size:18px}
+.ide-workspace{flex:1;min-height:0;display:grid;grid-template-columns:58px 260px minmax(0,1fr)}
+.activity-bar{display:flex;flex-direction:column;align-items:center;gap:8px;padding:12px 0;background:#171e2b;border-right:1px solid #283346}
+.activity{width:100%;height:48px;border:0;border-left:3px solid transparent;background:transparent;color:#9eacc0;font-size:27px;cursor:pointer}
+.activity:hover{color:#f3f7ff}.activity.active{border-left-color:#26a9ed;color:#42baf4}.activity-spacer{flex:1}
+.explorer-panel{min-width:0;min-height:0;display:flex;flex-direction:column;background:#171e2b;border-right:1px solid var(--ide-border)}
+.panel-heading{height:48px;flex:0 0 48px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;color:#b8c4d5;font-size:12px;font-weight:800;letter-spacing:.8px}
+.explorer-actions{display:flex;gap:3px}.explorer-actions button{border:0;background:transparent;color:#aebbd0;font-size:18px;padding:4px 6px;cursor:pointer}.explorer-actions button:hover{background:#2c394d;color:white}
+.explorer-project{margin:0;padding:11px 14px;background:#202a3a;color:#f0f4fb;font-size:13px;font-weight:800;letter-spacing:.4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.file-tree{flex:1;min-height:0;overflow:auto;padding:8px 7px 14px}
+.tree-section-label{padding:8px 9px;color:#8999ae;font-size:10px;font-weight:800;letter-spacing:1px}
+.tree-item{width:100%;display:flex;align-items:center;gap:9px;border:0;border-radius:3px;background:transparent;color:#d0d9e7;padding:6px 9px;text-align:left;cursor:pointer;font:13px Segoe UI,system-ui,sans-serif;white-space:nowrap;overflow:hidden}
+.tree-item:hover{background:#263348}.tree-item.active{background:#173f78;color:#fff;box-shadow:inset 2px 0 #39aaf0}.tree-item.folder{color:#d6e2f4}.tree-item .tree-icon{width:17px;flex:0 0 17px;text-align:center}.tree-item .tree-name{overflow:hidden;text-overflow:ellipsis}.tree-children{margin-left:12px;border-left:1px solid #39485d;padding-left:5px}
+.explorer-database{padding:12px 14px;border-top:1px solid #303b4d;background:#151c28}.db-title{font-size:10px;letter-spacing:1px;font-weight:800;color:#9eacc0;margin-bottom:7px}
+.database-state{display:flex;align-items:center;gap:8px;color:#bfcbd9;font-size:11px}.database-dot{width:8px;height:8px;border-radius:50%;background:#e1a54d;box-shadow:0 0 8px #e1a54d66}
+.main-workbench{min-width:0;min-height:0;display:flex;flex-direction:column;background:#111722}
+.workbench-top{flex:1;min-height:0;display:grid;grid-template-columns:minmax(360px,1.1fr) minmax(300px,.9fr)}
+.editor-side{min-width:0;min-height:0;display:flex;flex-direction:column;border-right:1px solid #303b4d}
+.editor-tabs{height:48px;flex:0 0 48px;display:flex;overflow-x:auto;background:#1a2230;border-bottom:1px solid #303b4d}
+.editor-tab{border:0;border-right:1px solid #303b4d;background:#202a3a;color:#b9c6d7;padding:0 16px;white-space:nowrap;cursor:pointer;font:13px Segoe UI,system-ui,sans-serif}
+.editor-tab.active{background:#111b2b;color:#fff;border-top:2px solid #2c9be9;padding-top:0}.editor-tab .tab-dirty{color:#f1c56d;margin-left:7px}.empty-tab{padding:14px;color:#8292a8;font-size:12px}
+.editor-toolbar{height:43px;flex:0 0 43px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:4px 12px;border-bottom:1px solid #263244;color:#9eacc0;font-size:12px}
+.editor-toolbar>span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.editor-tools{display:flex;align-items:center;gap:7px}.language-switch{display:flex;gap:2px}.language-tab{border:0;border-radius:4px;padding:4px 8px;background:#222e40;color:#aebdd0;font-size:11px;font-weight:800;cursor:pointer}.language-tab.active{background:#174c80;color:#fff}
+.language-badge{font-size:10px;color:#6fc9f2;background:#172c43;padding:4px 7px;border-radius:3px}
+.tool-button{border:1px solid #40516a;border-radius:4px;background:#26354a;color:#e7eef8;padding:6px 10px;font:600 11px Segoe UI,system-ui,sans-serif;cursor:pointer}.tool-button:hover{filter:brightness(1.2)}.tool-button.primary{background:#1768bd;border-color:#247ed8}.tool-button.small{padding:5px 9px}
+.code-area{display:flex;flex:1;min-height:180px;overflow:hidden;background:#111722}
+.line-numbers{width:48px;flex:0 0 48px;padding:12px 10px 20px 0;text-align:right;overflow:hidden;color:#7e8da2;background:#121a27;border-right:1px solid #283548;font:14px/1.65 Consolas,Monaco,monospace;white-space:pre}
+.code-area textarea{flex:1;min-width:0;resize:none;border:0;outline:0;padding:12px 16px 24px;background:transparent;color:#dce7f5;font:14px/1.65 Consolas,Monaco,monospace;tab-size:2;white-space:pre;overflow:auto}
+.preview-side{position:relative;min-width:0;min-height:0;display:flex;flex-direction:column;background:#f7f9fc;color:#172033}
+.preview-header{height:48px;flex:0 0 48px;display:flex;align-items:center;gap:10px;padding:0 14px;background:#1a2230;border-bottom:1px solid #303b4d;color:#dce5f2;font-size:12px;letter-spacing:.5px}
+.preview-globe{font-size:20px}.preview-spacer{flex:1}.preview-header button{border:0;background:transparent;color:#b9c7d8;font-size:21px;cursor:pointer;padding:4px 7px}.preview-header button:hover{color:white}
+#preview-frame{width:100%;height:100%;flex:1;border:0;background:white}.preview-empty{position:absolute;inset:48px 0 0;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;background:#f5f7fb;color:#68768b;font-size:13px;pointer-events:none}
+.terminal-panel{height:190px;flex:0 0 190px;display:flex;flex-direction:column;background:#111722;border-top:1px solid #303b4d}
+.terminal-tabs{height:40px;flex:0 0 40px;display:flex;align-items:center;gap:3px;padding:0 12px;border-bottom:1px solid #263244}
+.terminal-tabs button{border:0;background:transparent;color:#aebbd0;padding:9px 10px;font-size:11px;cursor:pointer}.terminal-tabs button.active-output{color:#fff;border-bottom:2px solid #26a9ed}.terminal-spacer{flex:1}
+.terminal-content{flex:1;overflow:auto;padding:10px 15px;color:#d3deeb;font:13px/1.6 Consolas,monospace}.terminal-prompt>span:first-child{color:#27b5f0;font-weight:800}.terminal-prompt #output{white-space:pre-wrap;overflow-wrap:anywhere}
+.workspace-statusbar{height:27px;flex:0 0 27px;display:flex;align-items:center;gap:18px;padding:0 12px;background:#075d91;color:#eaf7ff;font-size:11px}
+.status-brand{font-weight:900;font-size:12px}.workspace-statusbar #workspace-status{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.status-ready{font-weight:700}
+.empty-state{padding:12px;color:#91a0b4;font-size:12px}
+@media(max-width:1000px){.ide-menus{margin-left:2px}.ide-menus button{padding:7px 5px;font-size:12px}.workbench-top{grid-template-columns:minmax(300px,1fr) minmax(250px,.85fr)}.ide-workspace{grid-template-columns:48px 220px minmax(0,1fr)}}
+@media(max-width:720px){
+ .workspace-body{height:100dvh;min-height:500px}.ide-menubar{height:45px;flex-basis:45px;padding:0 9px;gap:9px}.ide-logo{font-size:27px}.ide-title{font-size:13px}.ide-menus{display:none}.window-controls{display:none}
+ .ide-workspace{grid-template-columns:38px 138px minmax(0,1fr)}.activity{height:42px;font-size:22px}.panel-heading{padding:0 7px;font-size:10px}.explorer-project{padding:9px 7px;font-size:10px}.explorer-actions{gap:0}.explorer-actions button{padding:3px;font-size:15px}
+ .tree-item{font-size:11px;padding:7px 4px;gap:4px}.tree-children{margin-left:6px;padding-left:3px}.explorer-database{padding:8px 6px}.db-title{font-size:8px}.database-state{font-size:9px;gap:5px}
+ .workbench-top{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(260px,1fr) minmax(190px,.75fr)}.editor-side{border-right:0;border-bottom:1px solid #303b4d}.editor-tabs{height:38px;flex-basis:38px}.editor-tab{padding:0 9px;font-size:11px}.editor-toolbar{height:auto;min-height:40px;flex-basis:auto;flex-wrap:wrap;padding:5px 7px}.editor-tools{gap:4px}.tool-button{padding:5px 7px}.code-area textarea{font-size:12px;padding:9px}.line-numbers{width:34px;flex-basis:34px;font-size:12px;padding-right:6px}
+ .preview-header{height:34px;flex-basis:34px;padding:0 8px}.preview-empty{inset:34px 0 0}.terminal-panel{height:125px;flex-basis:125px}.terminal-tabs{height:32px;flex-basis:32px;padding:0 4px}.terminal-tabs button{font-size:9px;padding:7px 5px}.terminal-content{font-size:11px;padding:7px}.workspace-statusbar{gap:7px;font-size:9px;padding:0 6px}.status-brand{font-size:10px}
 }
-@media(max-width:390px){.workspace-layout{grid-template-columns:128px minmax(0,1fr)}.tree-item{font-size:10px}.explorer-project{font-size:10px}}

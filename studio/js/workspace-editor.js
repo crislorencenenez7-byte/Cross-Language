@@ -168,7 +168,35 @@ $("new-folder").addEventListener("click", () => createItem("folder"));
 $("new-file").addEventListener("click", () => createItem("file"));
 $("save-file").addEventListener("click", () => saveActive().catch(error => setStatus(error.message)));
 $("compile-file").addEventListener("click", compileActive);
-$("open-preview").addEventListener("click", () => { if (state.dirty.size) { setStatus("Save your changes before opening Preview."); return; } window.open(`./preview.html?id=${encodeURIComponent(projectId)}`, "_blank", "noopener"); });
+async function refreshPreview(popout = false) {
+  if (state.dirty.size) await saveActive();
+  const url = `./preview.html?id=${encodeURIComponent(projectId)}&v=${Date.now()}`;
+  if (popout) { window.open(url, "_blank", "noopener"); return; }
+  const frame = $("preview-frame");
+  const empty = $("preview-empty");
+  if (frame) {
+    frame.src = url;
+    if (empty) empty.style.display = "none";
+    setStatus("Live preview refreshed from the current project files.");
+  }
+}
+$("open-preview").addEventListener("click", () => refreshPreview().catch(error => setStatus(error.message)));
+$("preview-popout").addEventListener("click", () => refreshPreview(true).catch(error => setStatus(error.message)));
+$("refresh-tree")?.addEventListener("click", () => refreshTree().catch(error => setStatus(error.message)));
+$("terminal-toggle")?.addEventListener("click", () => {
+  const panel = document.querySelector(".terminal-panel");
+  if (!panel) return;
+  panel.classList.toggle("collapsed");
+  panel.style.height = panel.classList.contains("collapsed") ? "40px" : "";
+  panel.style.flexBasis = panel.classList.contains("collapsed") ? "40px" : "";
+});
+document.querySelectorAll(".ide-menus [data-menu]").forEach(button => button.addEventListener("click", () => {
+  const menu = button.dataset.menu;
+  if (menu === "File") createItem("file");
+  else if (menu === "Run") refreshPreview().catch(error => setStatus(error.message));
+  else if (menu === "Terminal") document.querySelector(".terminal-panel")?.scrollIntoView({ block: "end" });
+  else setStatus(`${menu} menu is ready for the next IDE tools update.`);
+}));
 $("clear-output").addEventListener("click", () => { $("output").textContent = ""; });
 const languageEntry = { "X": "src/main.x", "X#": "src/main.xsharp", "XS": "src/main.xs" };
 document.querySelectorAll(".language-tab").forEach(tab => tab.addEventListener("click", () => {
@@ -199,6 +227,10 @@ async function start() {
   const data = await api(`/projects/${encodeURIComponent(projectId)}`);
   state.project = data.project; checkDatabase(); $("project-name").textContent = state.project.name; $("explorer-project").textContent = state.project.name.toUpperCase();
   await refreshTree();
+  const frame = $("preview-frame");
+  if (frame) frame.src = `./preview.html?id=${encodeURIComponent(projectId)}`;
+  const emptyPreview = $("preview-empty");
+  if (emptyPreview) emptyPreview.style.display = "none";
   const preferred = ["src/main.x", "src/main.xsharp", "src/main.xs"].find(path => state.files.some(file => file.path === path && file.type === "file"));
   const first = state.files.find(file => file.type === "file");
   if (preferred || first) await openFile(preferred || first.path);

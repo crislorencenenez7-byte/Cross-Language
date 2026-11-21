@@ -3,55 +3,79 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#080f1d">
-<title>CROSS Studio — Code Workspace</title>
+<meta name="theme-color" content="#111827">
+<title>CROSS Studio Code</title>
 <link rel="stylesheet" href="./css/studio.css">
 <link rel="stylesheet" href="./css/workspace.css">
 </head>
 <body class="workspace-body">
-<header class="workspace-topbar">
-  <a class="workspace-brand" href="./editor.html">CROSS <span>STUDIO 3.0</span></a>
-  <div class="workspace-project" id="project-name">Loading project…</div>
-  <div class="workspace-actions">
-    <button id="new-folder" class="tool-button" type="button">＋ Folder</button>
-    <button id="new-file" class="tool-button" type="button">＋ File</button>
-    <button id="save-file" class="tool-button primary" type="button">Save</button>
-    <button id="open-preview" class="tool-button accent" type="button">▶ Preview</button>
-  </div>
+<header class="ide-menubar">
+  <a class="ide-logo" href="./editor.html" aria-label="CROSS Studio">X</a>
+  <a class="ide-title" href="./editor.html">CROSS Studio Code</a>
+  <nav class="ide-menus" aria-label="Application menu">
+    <button type="button" data-menu="File">File</button><button type="button" data-menu="Edit">Edit</button>
+    <button type="button" data-menu="Selection">Selection</button><button type="button" data-menu="View">View</button>
+    <button type="button" data-menu="Go">Go</button><button type="button" data-menu="Run">Run</button>
+    <button type="button" data-menu="Terminal">Terminal</button><button type="button" data-menu="Help">Help</button>
+  </nav>
+  <div class="window-controls" aria-hidden="true"><span>—</span><span>□</span><span>×</span></div>
 </header>
-<main class="workspace-layout">
-  <aside class="explorer-panel" aria-label="Project explorer">
-    <div class="panel-heading"><span>EXPLORER</span><span id="file-count">0 files</span></div>
-    <div class="explorer-project" id="explorer-project">PROJECT</div>
-    <div id="file-tree" class="file-tree"><p class="empty-state">Loading files…</p></div>
-    <section class="explorer-database" aria-label="Database connection"><strong>PROJECT DATABASE</strong><div class="database-state"><span class="database-dot" id="database-dot"></span><span id="database-status">Checking database…</span></div></section>
+
+<div class="ide-workspace">
+  <aside class="activity-bar" aria-label="Activity bar">
+    <button class="activity active" type="button" title="Explorer">▣</button>
+    <button class="activity" type="button" title="Search" data-local-action="search">⌕</button>
+    <button class="activity" type="button" title="Source Control" data-local-action="source">⑂</button>
+    <button class="activity" type="button" title="Run and Debug" data-local-action="run">▷</button>
+    <button class="activity" type="button" title="Extensions" data-local-action="extensions">▦</button>
+    <span class="activity-spacer"></span><button class="activity" type="button" title="Settings" data-local-action="settings">⚙</button>
   </aside>
-  <section class="editor-panel">
-    <nav id="editor-tabs" class="editor-tabs" aria-label="Open files">
-      <span class="empty-tab">No file open</span>
-    </nav>
-    <div class="editor-toolbar">
-      <div><span id="active-path">Select a file from Explorer</span><span id="dirty-indicator"></span></div>
-      <div class="editor-tools">
-        <div class="language-switch" aria-label="CROSS language entry files"><button class="language-tab" data-language="X" type="button">X</button><button class="language-tab" data-language="X#" type="button">X#</button><button class="language-tab" data-language="XS" type="button">XS</button></div>
-        <span id="language-badge" class="language-badge">CROSS</span>
-        <button id="compile-file" class="tool-button small" type="button">Compile</button>
+
+  <aside class="explorer-panel" aria-label="Project explorer">
+    <div class="panel-heading"><span>EXPLORER</span><span class="explorer-actions"><button id="new-file" title="New file">＋</button><button id="new-folder" title="New folder">▰</button><button id="refresh-tree" title="Refresh">↻</button></span></div>
+    <div class="explorer-project" id="explorer-project">CROSS PROJECT</div>
+    <div id="file-tree" class="file-tree"><p class="empty-state">Loading project files…</p></div>
+    <section class="explorer-database" aria-label="Database connection"><div class="db-title">PROJECT DATABASE</div><div class="database-state"><span class="database-dot" id="database-dot"></span><span id="database-status">Checking SQLite…</span></div></section>
+  </aside>
+
+  <main class="main-workbench">
+    <div class="workbench-top">
+      <div class="editor-side">
+        <nav id="editor-tabs" class="editor-tabs" aria-label="Open files"><span class="empty-tab">No file open</span></nav>
+        <div class="editor-toolbar">
+          <span id="active-path">Select a file from Explorer</span>
+          <div class="editor-tools">
+            <div class="language-switch" aria-label="CROSS language entry files">
+              <button class="language-tab" data-language="X" type="button">X</button>
+              <button class="language-tab" data-language="X#" type="button">X#</button>
+              <button class="language-tab" data-language="XS" type="button">XS</button>
+            </div>
+            <span id="language-badge" class="language-badge">CROSS</span>
+            <button id="compile-file" class="tool-button small" type="button">Compile</button>
+            <button id="save-file" class="tool-button small primary" type="button">Save</button>
+          </div>
+        </div>
+        <div class="code-area" id="code-area">
+          <div id="line-numbers" class="line-numbers" aria-hidden="true">1</div>
+          <textarea id="source" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="Code editor" placeholder="Select a project file to start coding…" disabled></textarea>
+        </div>
       </div>
+      <section class="preview-side" aria-label="Live preview">
+        <div class="preview-header"><span class="preview-globe">◎</span><strong>LIVE PREVIEW</strong><span class="preview-spacer"></span><button id="open-preview" title="Refresh preview" type="button">↻</button><button id="preview-popout" title="Open preview in new tab" type="button">↗</button></div>
+        <iframe id="preview-frame" title="CROSS live website preview" src="about:blank"></iframe>
+        <div class="preview-empty" id="preview-empty">Save your X file, then press Run Preview.</div>
+      </section>
     </div>
-    <div class="code-area" id="code-area">
-      <div id="line-numbers" class="line-numbers" aria-hidden="true">1</div>
-      <textarea id="source" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="Code editor" placeholder="Choose a file from the Explorer to start editing…" disabled></textarea>
-    </div>
-    <section class="output-panel">
-      <div class="output-heading"><span>OUTPUT</span><button id="clear-output" class="text-button" type="button">Clear</button></div>
-      <pre id="output">CROSS compiler output will appear here.</pre>
+    <section class="terminal-panel">
+      <div class="terminal-tabs"><button class="terminal-tab active" type="button">PROBLEMS</button><button class="terminal-tab" type="button">OUTPUT</button><button class="terminal-tab active-output" type="button">TERMINAL</button><button class="terminal-tab" type="button">DEBUG CONSOLE</button><span class="terminal-spacer"></span><button id="clear-output" type="button" title="Clear terminal">⌫</button><button id="terminal-toggle" type="button" title="Collapse terminal">⌃</button></div>
+      <div class="terminal-content"><div class="terminal-prompt"><span>cross&gt;</span> <span id="output">CROSS Studio ready. Select a file, edit, save, and run preview.</span></div></div>
     </section>
-  </section>
-</main>
+  </main>
+</div>
+
 <footer class="workspace-statusbar">
-  <span id="workspace-status">Connecting to CROSS workspace…</span>
-  <span id="cursor-status">Ln 1, Col 1</span>
-  <span id="encoding-status">UTF-8</span>
+  <span class="status-brand">X&nbsp; CROSS 3.0</span><span id="workspace-status">Connecting to workspace…</span>
+  <span id="cursor-status">Ln 1, Col 1</span><span id="encoding-status">UTF-8</span><span id="language-status">X</span><span class="status-ready">● Ready</span>
 </footer>
 <script src="./js/api-config.js"></script>
 <script type="module" src="./js/workspace-editor.js"></script>
