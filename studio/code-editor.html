@@ -7,11 +7,20 @@
 <title>CROSS Studio Code</title>
 <link rel="stylesheet" href="./css/studio.css">
 <link rel="stylesheet" href="./css/workspace.css">
+<style>
+.mobile-ide-controls{display:none;align-items:center;gap:6px;margin-left:auto}
+.mobile-ide-controls button{border:1px solid #3a4b63;border-radius:7px;background:#202d40;color:#e6eef8;padding:7px 10px;font:600 12px system-ui}
+@media(max-width:900px){.mobile-ide-controls{display:flex}}
+</style>
 </head>
 <body class="workspace-body">
 <header class="ide-menubar">
   <a class="ide-logo" href="./editor.html" aria-label="CROSS Studio">X</a>
   <a class="ide-title" href="./editor.html">CROSS Studio Code</a>
+  <div class="mobile-ide-controls" aria-label="Workspace navigation">
+    <button type="button" id="mobile-explorer-toggle">Explorer</button>
+    <button type="button" id="mobile-preview-toggle">Preview</button>
+  </div>
   <nav class="ide-menus" aria-label="Application menu">
     <button type="button" data-menu="File">File</button><button type="button" data-menu="Edit">Edit</button>
     <button type="button" data-menu="Selection">Selection</button><button type="button" data-menu="View">View</button>
@@ -31,9 +40,9 @@
     <span class="activity-spacer"></span><button class="activity" type="button" title="Settings" data-local-action="settings">⚙</button>
   </aside>
 
-  <aside class="explorer-panel" aria-label="Project explorer">
+  <aside class="explorer-panel" id="explorer-panel" aria-label="Project explorer">
     <div class="panel-heading"><span>EXPLORER</span><span class="explorer-actions"><button id="new-file" title="New file">＋</button><button id="new-folder" title="New folder">▰</button><button id="refresh-tree" title="Refresh">↻</button></span></div>
-    <div class="explorer-project" id="explorer-project">CROSS PROJECT</div>
+    <div class="explorer-project" id="explorer-project">CROSS PROJECT <span id="file-count">0 files</span><span id="project-name" hidden></span></div>
     <div id="file-tree" class="file-tree"><p class="empty-state">Loading project files…</p></div>
     <section class="explorer-database" aria-label="Database connection"><div class="db-title">PROJECT DATABASE</div><div class="database-state"><span class="database-dot" id="database-dot"></span><span id="database-status">Checking SQLite…</span></div></section>
   </aside>

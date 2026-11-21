@@ -56,3 +56,54 @@
  .workbench-top{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(260px,1fr) minmax(190px,.75fr)}.editor-side{border-right:0;border-bottom:1px solid #303b4d}.editor-tabs{height:38px;flex-basis:38px}.editor-tab{padding:0 9px;font-size:11px}.editor-toolbar{height:auto;min-height:40px;flex-basis:auto;flex-wrap:wrap;padding:5px 7px}.editor-tools{gap:4px}.tool-button{padding:5px 7px}.code-area textarea{font-size:12px;padding:9px}.line-numbers{width:34px;flex-basis:34px;font-size:12px;padding-right:6px}
  .preview-header{height:34px;flex-basis:34px;padding:0 8px}.preview-empty{inset:34px 0 0}.terminal-panel{height:125px;flex-basis:125px}.terminal-tabs{height:32px;flex-basis:32px;padding:0 4px}.terminal-tabs button{font-size:9px;padding:7px 5px}.terminal-content{font-size:11px;padding:7px}.workspace-statusbar{gap:7px;font-size:9px;padding:0 6px}.status-brand{font-size:10px}
 }
+
+
+/* CROSS responsive workspace: phone-first navigation */
+@media (max-width: 900px) {
+  .workspace-body { min-height: 100dvh; height: 100dvh; overflow: hidden; }
+  .ide-menubar { height: 48px; flex-basis: 48px; gap: 10px; padding: 0 12px; }
+  .ide-logo { font-size: 27px; }
+  .ide-title { font-size: 14px; }
+  .ide-menus { display: none; }
+  .window-controls { display: none; }
+  .ide-workspace { display: flex; flex: 1; min-height: 0; position: relative; }
+  .activity-bar { display: none; }
+  .explorer-panel {
+    display: none; position: absolute; z-index: 30; inset: 0 auto 0 0;
+    width: min(82vw, 310px); box-shadow: 16px 0 40px #0009;
+  }
+  .explorer-panel.mobile-open { display: flex; }
+  .main-workbench { width: 100%; min-width: 0; flex: 1; }
+  .workbench-top { display: flex; min-height: 0; }
+  .editor-side { width: 100%; min-width: 0; border-right: 0; }
+  .preview-side { display: none; width: 100%; min-width: 0; }
+  .main-workbench.show-preview .editor-side { display: none; }
+  .main-workbench.show-preview .preview-side { display: flex; }
+  .editor-tabs { height: 43px; flex-basis: 43px; }
+  .editor-tab { padding: 0 12px; }
+  .editor-toolbar { height: auto; min-height: 48px; flex-basis: auto; flex-wrap: wrap; padding: 7px 9px; }
+  .editor-tools { width: 100%; justify-content: space-between; flex-wrap: wrap; }
+  .language-tab { padding: 7px 11px; }
+  .tool-button { padding: 8px 12px; }
+  .code-area { min-height: 0; }
+  .code-area textarea { font-size: 13px; padding: 12px 10px; }
+  .line-numbers { width: 38px; flex-basis: 38px; font-size: 12px; }
+  .terminal-panel { height: 145px; flex-basis: 145px; }
+  .terminal-tabs { overflow-x: auto; white-space: nowrap; }
+  .terminal-tabs button { font-size: 10px; padding: 0 7px; }
+  .workspace-statusbar { min-height: 27px; flex-wrap: nowrap; gap: 9px; overflow: hidden; font-size: 10px; }
+  .workspace-statusbar > * { white-space: nowrap; }
+  .workspace-statusbar #workspace-status { overflow: hidden; text-overflow: ellipsis; }
+}
+@media (max-width: 520px) {
+  .ide-title { font-size: 13px; }
+  .ide-workspace { min-height: 0; }
+  .explorer-panel { width: min(86vw, 290px); }
+  .terminal-panel { height: 118px; flex-basis: 118px; }
+  .terminal-tabs { height: 34px; flex-basis: 34px; padding: 0 6px; }
+  .terminal-content { padding: 9px 10px; overflow: auto; }
+  .editor-toolbar > span { font-size: 11px; }
+  .language-badge { display: none; }
+  #compile-file, #save-file { padding: 7px 9px; }
+  .workspace-statusbar #encoding-status { display: none; }
+}

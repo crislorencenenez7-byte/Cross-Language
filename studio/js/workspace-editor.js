@@ -5,6 +5,9 @@ import { compileXS, callXS } from "../../languages/xs/index.js";
 const API = window.CROSS_API_BASE || "http://127.0.0.1:8300/api";
 const params = new URLSearchParams(location.search);
 const projectId = params.get("id");
+if (!projectId || !/^\\d+$/.test(projectId)) {
+  window.location.replace("./editor.html?from=workspace");
+}
 const $ = id => document.getElementById(id);
 const allowed = new Set([".x", ".xsharp", ".xs", ".txt", ".json", ".md", ".css", ".html", ".js", ".svg", ".xml"]);
 const state = { project: null, files: [], open: new Map(), active: "", dirty: new Set() };
@@ -237,3 +240,22 @@ async function start() {
   else setStatus("Workspace ready. Create your first file.");
 }
 start().catch(error => { setStatus(error.message); $("file-tree").innerHTML = `<p class="empty-state">${escapeText(error.message)}</p>`; });
+
+// Mobile navigation: Explorer is a slide-out panel; Preview replaces the editor on narrow screens.
+const mobileExplorerToggle = $("mobile-explorer-toggle");
+const mobilePreviewToggle = $("mobile-preview-toggle");
+mobileExplorerToggle?.addEventListener("click", () => {
+  $("explorer-panel")?.classList.toggle("mobile-open");
+});
+mobilePreviewToggle?.addEventListener("click", () => {
+  const workbench = document.querySelector(".main-workbench");
+  const showing = workbench?.classList.toggle("show-preview");
+  mobilePreviewToggle.textContent = showing ? "Editor" : "Preview";
+  if (showing) refreshPreview().catch(error => setStatus(error.message));
+});
+document.addEventListener("click", event => {
+  const explorer = $("explorer-panel");
+  if (!explorer || !explorer.classList.contains("mobile-open")) return;
+  if (event.target.closest("#explorer-panel") || event.target.closest("#mobile-explorer-toggle")) return;
+  explorer.classList.remove("mobile-open");
+});
