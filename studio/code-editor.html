@@ -12,6 +12,13 @@
 .mobile-ide-controls button{border:1px solid #3a4b63;border-radius:7px;background:#202d40;color:#e6eef8;padding:7px 10px;font:600 12px system-ui}
 @media(max-width:900px){.mobile-ide-controls{display:flex}}
 </style>
+<style>
+#problems-list{display:none;color:#d7e2f0;font:12px/1.6 Consolas,monospace;white-space:pre-wrap}
+#problems-list.visible{display:block}
+.terminal-content.show-problems .terminal-prompt{display:none}
+.problem-error{color:#ff8585}
+.problem-success{color:#65d6a4}
+</style>
 </head>
 <body class="workspace-body">
 <header class="ide-menubar">
@@ -66,6 +73,7 @@
         </div>
         <div class="code-area" id="code-area">
           <div id="line-numbers" class="line-numbers" aria-hidden="true">1</div>
+          <pre id="highlight-layer" aria-hidden="true"></pre>
           <textarea id="source" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="Code editor" placeholder="Select a project file to start coding…" disabled></textarea>
         </div>
       </div>
@@ -75,11 +83,15 @@
         <div class="preview-empty" id="preview-empty">Save your X file, then press Run Preview.</div>
       </section>
     </div>
-    <section class="terminal-panel">
-      <div class="terminal-tabs"><button class="terminal-tab active" type="button">PROBLEMS</button><button class="terminal-tab" type="button">OUTPUT</button><button class="terminal-tab active-output" type="button">TERMINAL</button><button class="terminal-tab" type="button">DEBUG CONSOLE</button><span class="terminal-spacer"></span><button id="clear-output" type="button" title="Clear terminal">⌫</button><button id="terminal-toggle" type="button" title="Collapse terminal">⌃</button></div>
-      <div class="terminal-content"><div class="terminal-prompt"><span>cross&gt;</span> <span id="output">CROSS Studio ready. Select a file, edit, save, and run preview.</span></div></div>
-    </section>
+
   </main>
+    <section class="terminal-panel">
+      <div class="terminal-tabs"><button class="terminal-tab" id="problems-tab" type="button">PROBLEMS <span id="problem-count">0</span></button><button class="terminal-tab" type="button">OUTPUT</button><button class="terminal-tab active-output" type="button">TERMINAL</button><button class="terminal-tab" type="button">DEBUG CONSOLE</button><span class="terminal-spacer"></span><button id="clear-output" type="button" title="Clear terminal">⌫</button><button id="terminal-toggle" type="button" title="Collapse terminal">⌃</button></div>
+      <div class="terminal-content">
+        <div id="problems-list" class="problems-list">No problems detected.</div>
+        <div class="terminal-prompt"><span>cross&gt;</span> <span id="output">CROSS Studio ready. Select a file, edit, save, and run preview.</span></div>
+      </div>
+    </section>
 </div>
 
 <footer class="workspace-statusbar">

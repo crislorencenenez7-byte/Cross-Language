@@ -4,9 +4,25 @@ import { compileXS, callXS } from "../../languages/xs/index.js";
 
 const API = window.CROSS_API_BASE || "http://127.0.0.1:8300/api";
 const params = new URLSearchParams(location.search);
-const projectId = params.get("id");
-if (!projectId || !/^\\d+$/.test(projectId)) {
-  window.location.replace("./editor.html?from=workspace");
+let projectId = params.get("id");
+const validProjectId = value => /^\d+$/.test(String(value || ""));
+if (!validProjectId(projectId)) {
+  try {
+    const response = await fetch(`${API}/projects`, { cache: "no-store" });
+    const payload = await response.json();
+    if (!response.ok || !payload.success) throw new Error(payload.error || "Cannot load projects");
+    const firstProject = (payload.projects || [])[0];
+    if (firstProject) {
+      projectId = String(firstProject.id);
+      const next = new URL(location.href);
+      next.searchParams.set("id", projectId);
+      history.replaceState({}, "", next.toString());
+    } else {
+      location.replace("./editor.html?from=workspace&empty=1");
+    }
+  } catch (_) {
+    location.replace("./editor.html?from=workspace&backend=unavailable");
+  }
 }
 const $ = id => document.getElementById(id);
 const allowed = new Set([".x", ".xsharp", ".xs", ".txt", ".json", ".md", ".css", ".html", ".js", ".svg", ".xml"]);
@@ -132,6 +148,31 @@ async function createItem(type) {
     if (type === "file") await openFile(clean);
   } catch (error) { alert(error.message); }
 }
+function showProblems(items = []) {
+  const host = $("problems-list");
+  const count = $("problem-count");
+  if (!host || !count) return;
+  count.textContent = String(items.length);
+  host.replaceChildren();
+  if (!items.length) {
+    const line = document.createElement("div");
+    line.className = "problem-success";
+    line.textContent = "✓ No problems detected.";
+    host.append(line);
+  } else {
+    for (const item of items) {
+      const line = document.createElement("div");
+      line.className = "problem-error";
+      line.textContent = `✕ ${item.file || state.active || "source"}${item.line ? `:${item.line}` : ""}  ${item.message}`;
+      host.append(line);
+    }
+  }
+}
+function extractErrorLine(error) {
+  const text = String(error?.message || error);
+  const match = text.match(/(?:line|at)\s+(\d+)/i) || text.match(/:(\d+):(\d+)/);
+  return match ? Number(match[1]) : null;
+}
 function compileActive() {
   const path = state.active; if (!path) return;
   const content = $("source").value;
@@ -151,8 +192,17 @@ function compileActive() {
     } else {
       $("output").textContent = `${languageName(path)} file selected. CROSS compiler supports .x, .xsharp, and .xs source files.`;
     }
+    showProblems([]);
+    $("output").textContent += "\n\n✓ Build completed successfully.";
     setStatus(`Compile successful: ${path}`);
-  } catch (error) { $("output").textContent = `${languageName(path)} ERROR\n${error.message}`; setStatus(`Compile failed: ${path}`); }
+  } catch (error) {
+    const line = extractErrorLine(error);
+    showProblems([{ file: path, line, message: error.message }]);
+    $("output").textContent = `${languageName(path)} BUILD FAILED\n${error.message}`;
+    setStatus(`Compile failed: ${path}`);
+    document.querySelector(".terminal-content")?.classList.add("show-problems");
+    $("problems-list")?.classList.add("visible");
+  }
 }
 
 $("source").addEventListener("input", () => {
@@ -160,7 +210,10 @@ $("source").addEventListener("input", () => {
   state.open.set(state.active, $("source").value); state.dirty.add(state.active);
   $("dirty-indicator").textContent = " • Unsaved"; renderTabs(); updateLines();
 });
-$("source").addEventListener("scroll", () => { $("line-numbers").scrollTop = $("source").scrollTop; });
+$("source").addEventListener("scroll", () => {
+  $("line-numbers").scrollTop = $("source").scrollTop;
+  updateHighlight();
+});
 $("source").addEventListener("click", updateCursor); $("source").addEventListener("keyup", updateCursor);
 $("source").addEventListener("keydown", event => {
   if (event.key === "Tab") { event.preventDefault(); const start = event.target.selectionStart, end = event.target.selectionEnd; event.target.setRangeText("  ", start, end, "end"); event.target.dispatchEvent(new Event("input")); }
@@ -239,7 +292,13 @@ async function start() {
   if (preferred || first) await openFile(preferred || first.path);
   else setStatus("Workspace ready. Create your first file.");
 }
-start().catch(error => { setStatus(error.message); $("file-tree").innerHTML = `<p class="empty-state">${escapeText(error.message)}</p>`; });
+if (validProjectId(projectId)) {
+  start().catch(error => {
+    setStatus(error.message);
+    $("file-tree").innerHTML = `<p class="empty-state">${escapeText(error.message)}</p>`;
+    showProblems([{ file: "Workspace", message: error.message }]);
+  });
+}
 
 // Mobile navigation: Explorer is a slide-out panel; Preview replaces the editor on narrow screens.
 const mobileExplorerToggle = $("mobile-explorer-toggle");
@@ -259,3 +318,41 @@ document.addEventListener("click", event => {
   if (event.target.closest("#explorer-panel") || event.target.closest("#mobile-explorer-toggle")) return;
   explorer.classList.remove("mobile-open");
 });
+
+// VS Code-style bottom panel tabs.
+document.querySelectorAll(".terminal-tab").forEach(button => {
+  button.addEventListener("click", () => {
+    document.querySelectorAll(".terminal-tab").forEach(tab => tab.classList.remove("active-output"));
+    button.classList.add("active-output");
+    const panel = document.querySelector(".terminal-content");
+    if (!panel) return;
+    const isProblems = button.id === "problems-tab";
+    panel.classList.toggle("show-problems", isProblems);
+    if (isProblems) $("problems-list")?.classList.add("visible");
+    else $("problems-list")?.classList.remove("visible");
+  });
+});
+
+// Lightweight offline syntax coloring for CROSS source (X / X# / XS).
+function highlightSource(value) {
+  const escaped = String(value).replace(/[&<>]/g, ch => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;" })[ch]);
+  const pattern = /(\/\/.*|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|\b(?:project|window|component|device|function|class|let|const|var|if|else|for|while|return|print|showUI|import|export|public|private|new|true|false|null|and|or|not)\b|\b(?:App|Heading|Paragraph|Button|Text|Image|Container|Row|Column|Main|Color|Vector2|Vector3|Number|String|Boolean|Array|Object)\b|\b\d+(?:\.\d+)?\b)/g;
+  return escaped.replace(pattern, token => {
+    let cls = "tok-key";
+    if (/^["']/.test(token)) cls = "tok-string";
+    else if (/^\d/.test(token)) cls = "tok-number";
+    else if (/^(true|false|null)$/.test(token)) cls = "tok-bool";
+    else if (/^(App|Heading|Paragraph|Button|Text|Image|Container|Row|Column|Main|Color|Vector2|Vector3|Number|String|Boolean|Array|Object)$/.test(token)) cls = "tok-type";
+    else if (token.startsWith("//")) cls = "tok-comment";
+    return `<span class="${cls}">${token}</span>`;
+  }) + (String(value).endsWith("\\n") ? " " : "");
+}
+function updateHighlight() {
+  const source = $("source"), layer = $("highlight-layer");
+  if (!source || !layer) return;
+  layer.innerHTML = highlightSource(source.value);
+  layer.scrollTop = source.scrollTop;
+  layer.scrollLeft = source.scrollLeft;
+}
+$("source")?.addEventListener("input", updateHighlight);
+$("source")?.addEventListener("scroll", updateHighlight);

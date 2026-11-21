@@ -107,3 +107,49 @@
   #compile-file, #save-file { padding: 7px 9px; }
   .workspace-statusbar #encoding-status { display: none; }
 }
+
+/* Reference-matched desktop composition: activity rail, explorer, editor, preview, full-width terminal */
+@media (min-width: 901px) {
+  .ide-workspace {
+    display:grid;
+    grid-template-columns:58px 260px minmax(0,1fr);
+    grid-template-rows:minmax(0,1fr) 190px;
+    min-height:0;
+  }
+  .activity-bar { grid-column:1; grid-row:1; }
+  .explorer-panel { grid-column:2; grid-row:1; }
+  .main-workbench { grid-column:3; grid-row:1; min-height:0; }
+  .terminal-panel { grid-column:1 / -1; grid-row:2; width:100%; height:190px; }
+  .workbench-top { grid-template-columns:minmax(0,56%) minmax(0,44%); }
+  .workspace-body { min-height:620px; }
+}
+.code-area { position:relative; }
+#highlight-layer {
+  position:absolute; inset:0 0 0 48px; margin:0; padding:12px 16px 24px;
+  overflow:hidden; pointer-events:none; white-space:pre; tab-size:2;
+  color:#dce7f5; font:14px/1.65 Consolas,Monaco,monospace;
+}
+#source { position:relative; z-index:2; background:transparent; color:transparent; caret-color:#f3f7ff; }
+#source::selection { background:#285b91aa; }
+#highlight-layer .tok-key { color:#4fc1ff; font-weight:700; }
+#highlight-layer .tok-string { color:#ce9178; }
+#highlight-layer .tok-number { color:#b5cea8; }
+#highlight-layer .tok-comment { color:#7f8c9d; font-style:italic; }
+#highlight-layer .tok-type { color:#c586c0; }
+#highlight-layer .tok-bool { color:#569cd6; }
+.problem-error { color:#ff8585; }
+@media(max-width:900px) {
+  .ide-workspace { display:flex; flex-direction:column; }
+  .activity-bar { display:none; }
+  .explorer-panel { display:none; position:absolute; z-index:30; inset:0 auto 0 0; width:min(78vw,300px); box-shadow:16px 0 40px #0009; }
+  .explorer-panel.mobile-open { display:flex; }
+  .main-workbench { flex:1; width:100%; min-height:0; }
+  .workbench-top { display:flex; flex:1; min-height:0; }
+  .editor-side,.preview-side { width:100%; min-width:0; }
+  .preview-side { display:none; }
+  .main-workbench.show-preview .editor-side { display:none; }
+  .main-workbench.show-preview .preview-side { display:flex; }
+  .terminal-panel { width:100%; height:125px; flex:0 0 125px; }
+  #highlight-layer { left:34px; padding:9px; font-size:12px; }
+  #source { font-size:12px; padding:9px; }
+}
